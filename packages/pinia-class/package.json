@@ -1,0 +1,27 @@
+{
+  "name": "pinia-class",
+  "version": "0.0.1",
+  "description": "pinia typescript decorators",
+  "main": "index.js",
+  "files": ["index.d.ts"],
+  "types": "index.d.ts",
+  "author": "jquagliatini",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p .",
+    "build:watch": "tsc -p . --watch",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "pinia",
+    "vue",
+    "vue2",
+    "typescript",
+    "decorators"
+  ],
+  "devDependencies": {
+    "pinia": "^2.0.0",
+    "typescript": "^4.4.3",
+    "vue-class-component": "^7.2.6"
+  }
+}
