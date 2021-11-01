@@ -7,6 +7,11 @@
   "types": "index.d.ts",
   "author": "jquagliatini",
   "license": "MIT",
+  "repository": "github:jquagliatini/pinia-class",
+  "homepage": "https://github.com/jquagliatini/pinia-class/blob/main/packages/pinia-class",
+  "bugs": {
+    "url": "https://github.com/jquagliatini/pinia-class/issues"
+  },
   "scripts": {
     "build": "tsc -p .",
     "build:watch": "tsc -p . --watch",
