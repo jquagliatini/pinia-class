@@ -80,6 +80,6 @@ export const Store = <
   store: StoreDefinition<Id, S, G, A>
 ) =>
   createDecorator((options, key) => {
-    const stores = mapStores([store]) as any;
+    const stores = mapStores(store) as any;
     assignToOptions(options, "computed", key, stores[store.$id + "Store"]);
   });

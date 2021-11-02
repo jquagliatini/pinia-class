@@ -4,21 +4,50 @@ Porting [Vuex-Class][u:vc] to Pinia 🍍 !
 
 ## Installation
 
+> **tl;dr;**
+>
+> ```
+> $ npm i --save pinia-class pinia vue-class-component @vue/composition-api
+> ```
 
-**npm:**
 ```
 $ npm install --save pinia-class
 ```
 
-**yarn:**
+Quite naturally, `pinia` and `vue-class-component` are peer dependencies of this package:
+
 ```
-$ yarn add pinia-class
+$ npm i --save vue-class-component pinia
 ```
 
-**pnpm:**
+As described in [pinia][u:pinia-installation]'s documentation,
+you also need the composition-api, so in order to use pinia, and therefore
+`pinia-class`, you need to install `@vue/composition-api`
+
 ```
-$ pnpm install --save pinia-class
+$ npm i --save @vue/composition-api
 ```
+
+And initialize your project with
+
+```ts
+// main.ts
+import Vue from 'vue';
+import VueCompositionApi from '@vue/composition-api';
+import { PiniaVuePlugin, createPinia } from 'pinia';
+
+import App from './App.vue';
+
+Vue.use(VueCompositionApi)
+Vue.use(PiniaVuePlugin);
+
+new Vue({
+  render: h => h(App),
+  pinia: createPinia()
+}).$mount('#app');
+```
+
+[u:pinia-installation]: https://pinia.esm.dev/getting-started.html#installation
 
 ## Usage
 
@@ -58,4 +87,3 @@ export default class MyComponent extends Vue {
 ```
 
 [u:vc]: https://github.com/ktsn/vuex-class
-
