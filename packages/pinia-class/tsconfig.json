@@ -8,6 +8,6 @@
     "strict": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
-    "declaration": true
+    "declaration": true,
   }
 }
