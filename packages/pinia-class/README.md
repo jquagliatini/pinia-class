@@ -51,9 +51,9 @@ new Vue({
 
 ## Usage
 
-> See the example in the [`examples`](.../packages/examples) folder.
+> See the [`examples`][u:examples] project.
 
-You should be able to use pinia-class, quite similarly as [vuex-class][u:vc]
+You should be able to use pinia-class, quite similarly to [vuex-class][u:vc]
 
 ```typescript
 import Vue from 'vue'
@@ -86,4 +86,5 @@ export default class MyComponent extends Vue {
 }
 ```
 
+[u:examples]: https://github.com/jquagliatini/pinia-class/tree/main/packages/examples
 [u:vc]: https://github.com/ktsn/vuex-class
