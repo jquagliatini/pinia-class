@@ -73,5 +73,37 @@ export default class MyComponent extends Vue {
 }
 ```
 
+### WritableState
+
+`pinia-class` also introduces a new concept of `WritableState`.
+Contrary to `vuex`, [`pinia` allows to write directly into the store's state][u:writable-state].
+Hence, it becomes possible to directly expose the state as a reactive object.
+To do that you can can use the `@WritableState` decorator:
+
+```vue
+<template>
+  <ul><li v-for="fruit of fruits" :key="fruit">{{ fruit }}</li></ul>
+
+  <!-- Here we mutate the store globally -->
+  <button @click.stop="fruits = []">Clear</button>
+
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-facing-decorator';
+import { defineStore } from 'pinia';
+
+const useBasket = defineStore({ state: () => ({ fruits: [] as string[] }) });
+
+@Component
+export class MyComponent extends Vue {
+  // no readonly here
+  @WritableState(useBasket, ['fruits'])
+  fruits!: string[];
+}
+</script>
+```
+
 [u:examples]: https://github.com/jquagliatini/pinia-class/tree/main/packages/examples
 [u:vc]: https://github.com/ktsn/vuex-class
+[u:writable-state]: https://pinia.vuejs.org/core-concepts/state.html#modifiable-state
