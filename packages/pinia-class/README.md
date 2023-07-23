@@ -7,47 +7,35 @@ Porting [Vuex-Class][u:vc] to Pinia 🍍 !
 > **tl;dr;**
 >
 > ```
-> $ npm i --save pinia-class pinia vue-class-component @vue/composition-api
+> $ npm i --save pinia-class pinia vue-facing-decorator
 > ```
 
 ```
 $ npm install --save pinia-class
 ```
 
-Quite naturally, `pinia` and `vue-class-component` are peer dependencies of this package:
+Quite naturally, `pinia` and `vue-facing-decorator` are peer dependencies of this package:
 
 ```
-$ npm i --save vue-class-component pinia
-```
-
-As described in [pinia][u:pinia-installation]'s documentation,
-you also need the composition-api, so in order to use pinia, and therefore
-`pinia-class`, you need to install `@vue/composition-api`
-
-```
-$ npm i --save @vue/composition-api
+$ npm i --save vue-facing-decorator pinia
 ```
 
 And initialize your project with
 
 ```ts
 // main.ts
-import Vue from 'vue';
-import VueCompositionApi from '@vue/composition-api';
-import { PiniaVuePlugin, createPinia } from 'pinia';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
 import App from './App.vue';
 
-Vue.use(VueCompositionApi)
-Vue.use(PiniaVuePlugin);
-
-new Vue({
-  render: h => h(App),
-  pinia: createPinia()
-}).$mount('#app');
+creatApp(App)
+  .use(createPinia())
+  .moun('#app');
 ```
 
-[u:pinia-installation]: https://pinia.esm.dev/getting-started.html#installation
+**Links:**
+- Pinia Getting Started: https://pinia.esm.dev/getting-started.html#installation
 
 ## Usage
 
@@ -56,8 +44,7 @@ new Vue({
 You should be able to use pinia-class, quite similarly to [vuex-class][u:vc]
 
 ```typescript
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import { Component, Vue } from 'vue-facing-decorator'
 import { Action, Getter, Store, State } from 'pinia-class'
 import { useStore } from './store/myStore'
 
