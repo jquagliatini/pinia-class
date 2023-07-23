@@ -1,10 +1,7 @@
 import { defineStore } from "pinia";
+
 export const useBasket = defineStore("basket", {
-  state: () => {
-    return {
-      fruits: [] as string[],
-    };
-  },
+  state: () => ({ fruits: [] as string[] }),
   getters: {
     count: (state) => state.fruits.length,
     countFruits: (state) => (fruit: string) =>

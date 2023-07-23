@@ -6,7 +6,7 @@ import {
   StoreDefinition,
   _GettersTree,
 } from "pinia";
-import { createDecorator } from "vue-class-component";
+import { createDecorator } from "vue-facing-decorator";
 
 function assignToOptions(
   options: Record<string, any>,
@@ -17,6 +17,9 @@ function assignToOptions(
   if (!options[part]) {
     options[part] = {};
   }
+
+  const { [key]: _, ...data } = options.data();
+  options.data = () => data;
 
   options[part][key] = value;
   return options;
@@ -34,7 +37,7 @@ export const Action = <
 ) =>
   createDecorator((options, key) => {
     const actionName = (actionKey ?? key) as Keys;
-    const { [actionName]: action } = mapActions(store, [actionName]);
+    const { [actionName]: action } = mapActions<Id, S, G, A>(store, [actionName]);
 
     assignToOptions(options, "methods", key, action);
   });
@@ -51,7 +54,9 @@ export const Getter = <
 ) =>
   createDecorator((options, key) => {
     const getterName = (getterKey ?? key) as Keys;
-    const { [getterName]: getter } = mapState(store, [getterName]);
+    const { [getterName]: getter } = mapState<Id, S, G, A, Keys>(store, [
+      getterName,
+    ]);
     assignToOptions(options, "computed", key, getter);
   });
 
@@ -67,7 +72,9 @@ export const State = <
 ) =>
   createDecorator((options, key) => {
     const stateName = (stateKey ?? key) as Keys;
-    const { [stateName]: getter } = mapState(store, [stateName]);
+    const { [stateName]: getter } = mapState<Id, S, G, A, Keys>(store, [
+      stateName,
+    ]);
     assignToOptions(options, "computed", key, getter);
   });
 
@@ -80,6 +87,7 @@ export const Store = <
   store: StoreDefinition<Id, S, G, A>
 ) =>
   createDecorator((options, key) => {
-    const stores = mapStores(store) as any;
-    assignToOptions(options, "computed", key, stores[store.$id + "Store"]);
+    const realId = `${store.$id}Store` as const;
+    const stores = mapStores(store);
+    assignToOptions(options, "computed", key, stores[realId]);
   });

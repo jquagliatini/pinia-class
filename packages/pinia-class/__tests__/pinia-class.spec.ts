@@ -1,17 +1,14 @@
-import { createPinia, defineStore } from "pinia";
-import Vue from "vue";
-import Component from "vue-class-component";
+import { describe, it, vi, afterEach, beforeEach, expect } from "vitest";
+import { compile, defineComponent, getCurrentInstance } from "vue";
+import { createPinia, defineStore, setActivePinia } from "pinia";
+import { Component, Vue } from "vue-facing-decorator";
 import { Action, Getter, State, Store } from "../index";
-import { mocked } from "ts-jest/utils";
 
-const addFruitSpy = jest.fn(function (
-  this: { fruits: string[] },
-  fruit: string
-) {
+const addFruitSpy = vi.fn(function (this: { fruits: string[] }, fruit: string) {
   this.fruits.push(fruit);
 });
 
-const addFruitsSpy = jest.fn(function (
+const addFruitsSpy = vi.fn(function (
   this: { fruits: string[] },
   fruits: string[]
 ) {
@@ -58,38 +55,51 @@ function factory() {
     readonly fruitCount!: (fruit: string) => number;
   }
 
-  return new MyComponent({ pinia: createPinia() });
+  type Method = (...args: any) => any;
+  return MyComponent as unknown as {
+    methods: {
+      [K in keyof MyComponent as (MyComponent[K] extends Method ? K : never)]:
+        MyComponent[K]
+    };
+    computed: { [K in keyof MyComponent]: () => MyComponent[K] };
+  };
 }
 
+beforeEach(() => {
+  setActivePinia(createPinia());
+});
+
 afterEach(() => {
-  mocked(addFruitSpy).mockClear();
-  mocked(addFruitsSpy).mockClear();
+  vi.mocked(addFruitSpy).mockClear();
+  vi.mocked(addFruitsSpy).mockClear();
 });
 
 describe("pinia-class", () => {
   describe("Getters", () => {
     it("should map to a specific key", () => {
       const component = factory();
-      expect(component.myFruitCount("🍎")).toBe(1);
+      const got = component.computed.myFruitCount()("🍎")
+      console.log(got);
+      expect(got).toBe(1);
     });
 
     it("should map to the attribute name", () => {
       const component = factory();
-      expect(component.count).toBe(4);
+      expect(component.computed.count()).toBe(4);
     });
   });
 
   describe("Actions", () => {
     it("should map to an action by key", () => {
       const component = factory();
-      component.addFruit("🍎");
+      component.methods.addFruit("🍎");
 
       expect(addFruitSpy).toHaveBeenCalledWith("🍎");
     });
 
     it("should map to an action by attribute name", () => {
       const component = factory();
-      component.addFruits(["🍎", "🍎"]);
+      component.methods.addFruits(["🍎", "🍎"]);
 
       expect(addFruitsSpy).toHaveBeenCalledWith(["🍎", "🍎"]);
     });
@@ -98,7 +108,7 @@ describe("pinia-class", () => {
   describe("Store", () => {
     it("should map the store directly in the component", () => {
       const component = factory();
-      component.$store.addFruits(["🍎", "🍎"]);
+      component.computed.$store().addFruits(["🍎", "🍎"]);
       expect(addFruitsSpy).toHaveBeenCalledWith(["🍎", "🍎"]);
     });
   });
@@ -106,12 +116,12 @@ describe("pinia-class", () => {
   describe("State", () => {
     it("should map state with a key", () => {
       const component = factory();
-      expect(component.fruits).toStrictEqual(["🍍", "🍎", "🍇", "🍋"]);
+      expect(component.computed.fruits()).toStrictEqual(["🍍", "🍎", "🍇", "🍋"]);
     });
 
     it("should map state with attribute name", () => {
       const component = factory();
-      expect(component.fruitCount("🍎")).toBe(1);
+      expect(component.computed.fruitCount()("🍎")).toBe(1);
     });
   });
 });

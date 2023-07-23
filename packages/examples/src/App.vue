@@ -11,8 +11,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+<script lang="ts">
+import { Component, Vue } from 'vue-facing-decorator';
 import { Action, Getter } from 'pinia-class';
 import { useBasket } from './stores/basket/useBasket.store'
 
