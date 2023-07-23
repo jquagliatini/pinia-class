@@ -1,6 +1,6 @@
 {
   "name": "pinia-class",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "pinia typescript decorators",
   "main": "index.js",
   "module": "index.esm.js",
